@@ -2,17 +2,17 @@ import mysql.connector
 
 class Con_MySQL():
 
-    def __init__(self,db:str,table:str):
-        """Initializarea bazei de date
-
-        :db str: Numele bazei de date
-        :table str: Numele tabelei"""
+    def __init__(self,host,user,password,db,table):
+        self.host=host
+        self.user=user
+        self.password=password
         self.db=db
         self.table=table
-        self.mydb=mysql.connector.connect(host='localhost',
-                                          user='root',
-                                          password='root',
-                                          database=db)
+        self.mydb=mysql.connector.connect(host=self.host,
+                                          user=self.user,
+                                          password=self.password,
+                                          database=self.db,
+                                          auth_plugin='mysql_native_password')
         self.cursor=self.mydb.cursor()
 
     def _select(self,query):
