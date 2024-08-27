@@ -17,5 +17,5 @@ class utilizatori():
         dict={}
         if len(tuple)==len(list):
             for i in range(len(tuple)):
-                dict[list[i]]=self.__str_or_list(tuple[i])
+                dict[list[i]]=tuple[i]
         return dict

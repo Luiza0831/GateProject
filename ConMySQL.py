@@ -20,7 +20,11 @@ class Con_MySQL():
         return self.cursor.fetchall()
 
     def _insert(self,dict:dict):
-        query=f'INSERT INTO `{self.db}`.`{self.table}` VALUES('
+        query=f'INSERT INTO `{self.db}`.`{self.table}` ('
+        for key in dict:
+            query+=f'`{key}`,'
+        query=query[:-1]
+        query+=') VALUES('
         for key in dict:
             if type(dict[key])==int or dict[key]=='null':
                 query+=f"{dict[key]},"
