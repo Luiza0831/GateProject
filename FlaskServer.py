@@ -20,16 +20,12 @@ def frontlogin():
 def frontuserinsert():
     return render_template('userinsert.html')
 
-@app.route('/options')
-def frontoptions():
-    return render_template('options.html')
-
 @app.route('/adminlogin',methods=['POST'])
 def login():
     inputs=request.form
     if inputs['Email']==email:
         if hashlib.md5(str(inputs['Password']).encode('utf-8')).hexdigest()==password:
-            return 'Login successful!'
+            return  render_template('options.html')
         else:
             return 'Password doesnt match!'
     else:
