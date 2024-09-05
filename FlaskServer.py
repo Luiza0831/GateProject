@@ -1,32 +1,15 @@
 from flask import Flask,request,render_template
-from Utilizatori import utilizatori
-from ConMySQL import Con_MySQL
-from PoartaTip1 import *
-import hashlib,json,os
+from main import *
 
-def admin_details(path,method,newcontent=None):
-    if method=='read':
-        if os.path.exists(path):
-            with open(path,'r')as jsonfile:
-                content=json.load(jsonfile)
-                return content
-        else:
-            return []
-    elif method=='write' and newcontent!=None:
-        with open(path,'w')as jsonfile:
-            json.dump(newcontent,jsonfile)
-            return 'Am salvat!'
-    
-path='adminDetails.json'
-conAngajati=Con_MySQL('localhost','root','root','birouri','angajati')
-angajati=utilizatori(conAngajati)
-admins=admin_details(path,'read')
-current_admin={}
 app=Flask(__name__)
 
 @app.route('/')
 def front_home():
     return render_template('home.html')
+
+@app.route('/access')
+def front_access():
+    return render_template('access.html')
 
 @app.route('/login')
 def front_login():
@@ -53,7 +36,7 @@ def admin_signup():
             return 'Numele companiei trebuie sa fie unic!'
     if inputs['Email'].endswith('@yahoo.com') or inputs['Email'].endswith('@gmail.com'):
         if inputs['Password']==inputs['Repeat_Password']:
-            inputs['Password']=hashlib.md5(str(inputs['Password']).encode('utf-8')).hexdigest()
+            inputs['Password']=hash_password(inputs['Password'])
             inputs['Manageri']=[]
             del inputs['Repeat_Password']
             admins.append(inputs)
@@ -62,8 +45,7 @@ def admin_signup():
         else:
             return 'Trebuie sa introduceti aceeasi parola!'
     else:
-        return 'Introduceti un email sau gmail valid!'
-
+        return 'Introduceti un email valid!'
 
 @app.route('/home',methods=['POST'])
 def home():
@@ -80,7 +62,7 @@ def login():
     global current_admin
     inputs=request.form
     if inputs['Email']==current_admin['Email']:
-        if hashlib.md5(str(inputs['Password']).encode('utf-8')).hexdigest()==current_admin['Password']:
+        if hash_password(inputs['Password'])==current_admin['Password']:
             return  render_template('options.html')
         else:
             return 'Parola incorecta!'
@@ -116,6 +98,7 @@ def inregistrare_manager():
 @app.route('/inregistrare/poarta',methods=['POST'])
 def inregistrare_poarta():
     inputs=request.form.to_dict()
+    return poartatip2.inregistreaza_access_db(inputs['IDPersoana'],checkSens(inputs['IDPersoana']),inputs['IDPoarta'],checkID(inputs['IDPersoana']))
 
 if __name__=='__main__':
     app.run(host='0.0.0.0',port=4000,debug=True)
