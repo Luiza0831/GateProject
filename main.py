@@ -1,6 +1,5 @@
 from Utilizatori import utilizatori
 from ConMySQL import Con_MySQL
-from PoartaTip1 import *
 from PoartaTip2 import *
 import hashlib,json,os
 
