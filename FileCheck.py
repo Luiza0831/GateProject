@@ -3,19 +3,25 @@ import os,time
 
 class FileCheck():
 
-    def __init__(self,path):
+    def __init__(self,path,database):
         self.path=path
-        os.makedirs(self.path+'/backup')
-
-    def __backup(self,name):
-        os.rename(self.path+'/backup/'+name)
+        self.database=database
+        self.txtfile=PoartaTXT(self.path,self.database)
+        self.csvfile=PoartaCSV(self.path,self.database)
+        self.txtfile._generateBackupDirectory()
+        self.__listener()
 
     def __listener(self):
        while True:
+            print('working..')
             files=os.listdir(self.path)
             for file in files:
                 if file.endswith('.txt'):
-                    pass
+                    print('file saved')
+                    self.txtfile._save_to_database(file)
+                    self.txtfile._generateBackupFile(file)
                 elif file.endswith('.csv'):
-                    pass
-            time.sleep(3)
+                    print('file saved')
+                    self.csvfile._save_to_database(file)
+                    self.csvfile._generateBackupFile(file)
+            time.sleep(5)
