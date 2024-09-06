@@ -1,5 +1,5 @@
 from flask import Flask,request,render_template
-from main import *
+from Details import *
 
 app=Flask(__name__)
 
@@ -99,6 +99,3 @@ def inregistrare_manager():
 def inregistrare_poarta():
     inputs=request.form.to_dict()
     return poartatip2.inregistreaza_access_db(inputs['IDPersoana'],checkSens(inputs['IDPersoana']),inputs['IDPoarta'],checkID(inputs['IDPersoana']))
-
-if __name__=='__main__':
-    app.run(host='0.0.0.0',port=4000,debug=True)

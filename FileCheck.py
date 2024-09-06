@@ -8,8 +8,6 @@ class FileCheck():
         self.database=database
         self.txtfile=PoartaTXT(self.path,self.database)
         self.csvfile=PoartaCSV(self.path,self.database)
-        self.txtfile._generateBackupDirectory()
-        self.__listener()
 
     def __listener(self):
        while True:
@@ -25,3 +23,7 @@ class FileCheck():
                     self.csvfile._save_to_database(file)
                     self.csvfile._generateBackupFile(file)
             time.sleep(5)
+    
+    def startProgram(self):
+        self.txtfile._generateBackupDirectory()
+        self.__listener()
