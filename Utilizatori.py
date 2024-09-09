@@ -2,10 +2,7 @@ class utilizatori():
 
     def __init__(self,angajatiMySQL):
         self.angajatiMySQL=angajatiMySQL
-        self.listaAngajati=[]
-        angajatiDB=self.angajatiMySQL._select(f'SELECT * FROM `{self.angajatiMySQL.db}`.`{self.angajatiMySQL.table}`;')
-        for angajat in angajatiDB:
-            self.listaAngajati.append(self.__tupple_to_dict(angajat,['ID','Nume','Prenume','Companie','IDManager']))
+        self.listaAngajati=self._lista_angajati()
 
     def _inregistrez_utilizator(self,utilizator):
         self.angajatiMySQL._insert(utilizator)
@@ -19,3 +16,10 @@ class utilizatori():
             for i in range(len(tuple)):
                 dict[list[i]]=tuple[i]
         return dict
+    
+    def _lista_angajati(self):
+        listaAngajati=[]
+        angajatiDB=self.angajatiMySQL._select(f'SELECT * FROM `{self.angajatiMySQL.db}`.`{self.angajatiMySQL.table}`;')
+        for angajat in angajatiDB:
+            listaAngajati.append(self.__tupple_to_dict(angajat,['ID','Nume','Prenume','Companie','IDManager']))
+        return listaAngajati

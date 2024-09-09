@@ -86,16 +86,23 @@ def inregistrare_manager():
     inputs=request.form.to_dict()
     if inputs['Companie'] != current_admin['Companie']:
         return f'Introduceti compania administrata de dumneavoastra!'
-    angajati._inregistrez_utilizator(inputs)
-    id=angajati.listaAngajati[-1]['ID']
-    current_admin['Manageri'].append(id)
-    for i in range(len(admins)):
-        if admins[i]['Companie']==current_admin['Companie']:
-            admins[i]['Manageri']=current_admin['Manageri']
-    admin_details(path,'write',admins)
+    if inputs['Email'].endswith('@yahoo.com') or inputs['Email'].endswith('@gmail.com'):
+        email=inputs['Email']
+        del inputs['Email']
+        angajati._inregistrez_utilizator(inputs)
+        id=angajati.listaAngajati[-1]['ID']
+        current_admin['Manageri'][id]=email
+        for i in range(len(admins)):
+            if admins[i]['Companie']==current_admin['Companie']:
+                admins[i]['Manageri']=current_admin['Manageri']
+        admin_details(path,'write',admins)
     return 'Manager inregistrat cu succes!'
 
 @app.route('/inregistrare/poarta',methods=['POST'])
 def inregistrare_poarta():
+    global current_admin
     inputs=request.form.to_dict()
-    return poartatip2.inregistreaza_access_db(inputs['IDPersoana'],checkSens(inputs['IDPersoana']),inputs['IDPoarta'],checkID(inputs['IDPersoana']))
+    companie=conAngajati._select(f'SELECT `Companie` FROM `{conAngajati.db}`.`{conAngajati.table}` WHERE `ID` = {inputs['IDPersoana']};')
+    if companie[0][0]==current_admin['Companie']:
+        return poartatip2.inregistreaza_access_db(inputs['IDPersoana'],checkSens(inputs['IDPersoana']),inputs['IDPoarta'],checkID(inputs['IDPersoana']))
+    return 'Compania angajatului nu corespunde cu cea introdusa mai devreme!'

@@ -3,13 +3,10 @@
         "Companie": "IT School",
         "Email": "alexandru97luiza@yahoo.com",
         "Password": "728bee5463e2b69d225736d6452f48e9",
-        "Manageri": [
-            1,
-            3,
-            6,
-            7,
-            9,
-            14
-        ]
+        "Manageri": {
+            "1": "luiza.lui97@yahoo.com",
+            "3": "luiza.lui97@yahoo.com",
+            "6": "luiza.lui97@yahoo.com"
+        }
     }
 ]

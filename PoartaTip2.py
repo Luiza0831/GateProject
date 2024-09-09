@@ -5,9 +5,10 @@ class PoartaTip2():
         self.database=database
 
     def inregistreaza_access_db(self,id,sens,idPoarta,checkID):
+        data=(f'{datetime.datetime.now()}'.replace(' ','T'))[:-3]+'Z'
         if checkID!=None:
             access={'IDPersoana':id,
-                'Data':datetime.datetime.now(),
+                'Data':data,
                 'Sens':sens,
                 'IDPoarta':idPoarta}
             self.database._insert(access)
