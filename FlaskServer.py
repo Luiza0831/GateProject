@@ -7,13 +7,17 @@ app=Flask(__name__)
 def front_home():
     return render_template('home.html')
 
-@app.route('/access')
-def front_access():
-    return render_template('access.html')
+@app.route('/signup')
+def front_signup():
+    return render_template('signup.html')
 
 @app.route('/login')
 def front_login():
     return render_template('login.html')
+
+@app.route('/access')
+def front_access():
+    return render_template('access.html')
 
 @app.route('/adauga/angajat')
 def front_adauga_angajat():
@@ -23,9 +27,15 @@ def front_adauga_angajat():
 def front_adauga_manager():
     return render_template('adauga_manager.html')
 
-@app.route('/signup')
-def front_signup():
-    return render_template('signup.html')
+@app.route('/home',methods=['POST'])
+def home():
+    global current_admin
+    inputs=request.form
+    for admin in admins:
+        if inputs['Companie']==admin['Companie']:
+            current_admin=admin
+            return render_template('menu.html')
+    return 'Compania nu este inregistrata in baza de date!'
 
 @app.route('/adminsignup',methods=['POST'])
 def admin_signup():
@@ -46,16 +56,6 @@ def admin_signup():
             return 'Trebuie sa introduceti aceeasi parola!'
     else:
         return 'Introduceti un email valid!'
-
-@app.route('/home',methods=['POST'])
-def home():
-    global current_admin
-    inputs=request.form
-    for admin in admins:
-        if inputs['Companie']==admin['Companie']:
-            current_admin=admin
-            return render_template('menu.html')
-    return 'Compania nu este inregistrata in baza de date!'
     
 @app.route('/adminlogin',methods=['POST'])
 def login():
@@ -98,11 +98,21 @@ def inregistrare_manager():
         admin_details(path,'write',admins)
     return 'Manager inregistrat cu succes!'
 
-@app.route('/inregistrare/poarta',methods=['POST'])
-def inregistrare_poarta():
+@app.route('/inregistrare/access',methods=['POST'])
+def inregistrare_access():
     global current_admin
     inputs=request.form.to_dict()
     companie=conAngajati._select(f'SELECT `Companie` FROM `{conAngajati.db}`.`{conAngajati.table}` WHERE `ID` = {inputs['IDPersoana']};')
     if companie[0][0]==current_admin['Companie']:
         return poartatip2.inregistreaza_access_db(inputs['IDPersoana'],checkSens(inputs['IDPersoana']),inputs['IDPoarta'],checkID(inputs['IDPersoana']))
     return 'Compania angajatului nu corespunde cu cea introdusa mai devreme!'
+
+@app.route('/lista/angajati')
+def lista_angajati():
+    global current_admin
+    return conAngajati._select(f'SELECT * FROM `{conAngajati.db}`.`{conAngajati.table}` WHERE `Companie` = "{current_admin['Companie']}" and `IDManager` is not null;')
+
+@app.route('/lista/manageri')
+def lista_manageri():
+    global current_admin
+    return conAngajati._select(f'SELECT `ID`,`Nume`,`Prenume`,`Companie` FROM `{conAngajati.db}`.`{conAngajati.table}` WHERE `Companie` = "{current_admin['Companie']}" and `IDManager` is null;')
