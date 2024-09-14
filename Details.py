@@ -29,9 +29,9 @@ angajati=utilizatori(conAngajati)
 admins=admin_details(path,'read')
 current_admin=admins[0]
 poartatip2=PoartaTip2(conAccess)
-Checker=FileCheck('Intrari',conAccess)
+checker=FileCheck('intrari',conAccess)
 emailSender=EmailSender('alexandru97luiza.cristina@gmail.com')
-checkHours=CheckWorkHours(conAccess,conAngajati,angajati,'Intrari/Backup','20',emailSender)
+checkHours=CheckWorkHours(conAccess,conAngajati,angajati,'intrari/backup','20',emailSender)
 
 def checkID(id):
     if type(id)==int or id.isdigit():

@@ -8,8 +8,9 @@ class PoartaTXT(Poarta):
             with open(self.path+'/'+name,'r') as txtfile:
                 lines=txtfile.readlines()
                 for i in range(len(lines)-1,-1,-1):
-                    lines[i]=lines[i].replace('; \n','')
-                    lines[i]=lines[i].replace(';\n','')
+                    lines[i]=lines[i].replace('\n','')
+                    lines[i]=lines[i].replace(' ','')
+                    lines[i]=lines[i].replace(';','')
                 return lines
         return []
 

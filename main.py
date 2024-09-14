@@ -3,7 +3,7 @@ from Details import *
 import threading
 
 if __name__=='__main__':
-    t1=threading.Thread(target=Checker.startProgram)
+    t1=threading.Thread(target=checker.startProgram)
     t2=threading.Thread(target=checkHours.start(current_admin))
     t1.start()
     t2.start()
