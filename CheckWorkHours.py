@@ -25,7 +25,7 @@ class CheckWorkHours():
             file.write(str(lastID))
 
     def __getLastID(self):
-        lastID=self.conAccess._select(f'SELECT `IDAcces` FROM `{self.conAccess.db}`.`{self.conAccess.table}`;')
+        lastID=self.conAccess._select(f'SELECT `IDAccess` FROM `{self.conAccess.db}`.`{self.conAccess.table}`;')
         return lastID[-1][0]
     
     def __convert(self,n):
@@ -48,7 +48,7 @@ class CheckWorkHours():
             return 'w'
 
     def __intrariAngajat(self,id,lastID):
-        intrari=self.conAccess._select(f'SELECT `Data` FROM `{self.conAccess.db}`.`{self.conAccess.table}` WHERE `IDPersoana` = {id} and `IDAcces` > {lastID} ORDER BY `Data`;')
+        intrari=self.conAccess._select(f'SELECT `Data` FROM `{self.conAccess.db}`.`{self.conAccess.table}` WHERE `IDPersoana` = {id} and `IDAccess` > {lastID} ORDER BY `Data`;')
         intrariPeZi={}
         lista=[]
         for intrare in intrari:
